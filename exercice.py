@@ -4,17 +4,59 @@
 from collections import deque
 
 
-def get_fibonacci_number(TODO):
-	pass
+def get_fibonacci_number(index):
+	# if index == 0:
+	# 	return 0
+	# elif index == 1:
+	# 	return 1
+	# else:
+	# 	return get_fibonacci_number(index - 1) + get_fibonacci_number(index - 2)
+	return (
+		0 if index == 0 else 
+		1 if index == 1 else 
+		get_fibonacci_number(index - 1) + get_fibonacci_number(index - 2)
+	) # Belle façon de le faire pis que ça soit lisible, tout en étant seulement "une" ligne.
 
-def get_fibonacci_sequence(TODO):
-	pass
+def get_fibonacci_sequence(length, seq=[0, 1]):
+	# # Bâtir les deux premiers éléments pas définis récursivement.
+	# # Bâtir récursivement le reste.
+	# if length == 1:
+	# 	return seq[0:1]
+	# elif length == 2:
+	# 	return seq[0:2]
+	# elif len(seq) < length:
+	# 	return get_fibonacci_sequence(length, seq + [seq[-1] + seq[-2]])
+	# else:
+	# 	return seq
+	return (
+		seq[0:length] if length <= 2 else
+		get_fibonacci_sequence(length, seq + [seq[-1] + seq[-2]]) if len(seq) < length else
+		seq
+	)
+def get_sorted_dict_by_decimals(dict_arg):
+	# def decimal_part(t):
+	# 	return t[1] % 1.0
+	# return dict(sorted(dict_arg.items(), key=decimal_part))
+	return dict(sorted(dict_arg.items(), key=lambda t: t[1] % 1.0)) # Chad big brain lambda versus virgin nested function
 
-def get_sorted_dict_by_decimals(TODO):
-	pass
+def fibonacci_numbers(length):
+	INIT_VALUES = [0, 1]
+	# yield INIT_VALUES[0]
+	# if length >= 2:
+	# 	yield INIT_VALUES[1]
+	for i, elem in zip(INIT_VALUES, range(0, min(length, len(INIT_VALUES)))):
+		yield elem
+	last_elems = deque(INIT_VALUES)
+	if length > 2:
+		for i in range(2, length):
+			fibo_number = last_elems[-1] + last_elems[-2]
+			last_elems.append(fibo_number)
+			last_elems.popleft()
+			yield fibo_number
 
 def build_recursive_sequence_generator(TODO):
 	pass
+
 
 if __name__ == "__main__":
 	print([get_fibonacci_number(0), get_fibonacci_number(1), get_fibonacci_number(2)])
@@ -42,6 +84,7 @@ if __name__ == "__main__":
 	print(get_sorted_dict_by_decimals(eggs))
 	print()
 
+	print("-======- Generators -======-")
 	for fibo_num in fibonacci_numbers(10):
 		print(fibo_num, end=" ")
 	print("\n")
