@@ -54,8 +54,20 @@ def fibonacci_numbers(length):
 			last_elems.popleft()
 			yield fibo_number
 
-def build_recursive_sequence_generator(TODO):
-	pass
+def build_recursive_sequence_generator(initial_values, recursive_def, keep_whole_sequence=False):
+	def recursive_generator(length):
+		for i, elem in enumerate(initial_values):
+			if i >= length:
+				break
+			yield elem
+		last_elems = deque(initial_values)
+		for i in range(len(initial_values), length):
+			fibo_number = recursive_def(last_elems)
+			last_elems.append(fibo_number)
+			if not keep_whole_sequence:
+				last_elems.popleft()
+			yield fibo_number
+	return recursive_generator
 
 
 if __name__ == "__main__":
@@ -85,7 +97,7 @@ if __name__ == "__main__":
 	print()
 
 	print("-======- Generators -======-")
-	for fibo_num in fibonacci_numbers(10):
+	for fibo_num in fibonacci_numbers(1):
 		print(fibo_num, end=" ")
 	print("\n")
 
@@ -96,9 +108,9 @@ if __name__ == "__main__":
 		print(fi, end=" ")
 	print("\n")
 
-	lucas = build_recursive_sequence_generator(TODO)
+	lucas = build_recursive_sequence_generator([2, 1], lambda seq: seq[-1] + seq[-2])
 	print(f"Lucas : {[elem for elem in lucas(10)]}")
-	perrin = build_recursive_sequence_generator(TODO)
+	perrin = build_recursive_sequence_generator([3, 0, 2], lambda seq: seq[-2] + seq[-3])
 	print(f"Perrin : {[elem for elem in perrin(10)]}")
-	hofstadter_q = build_recursive_sequence_generator(TODO)
+	hofstadter_q = build_recursive_sequence_generator([1, 1], lambda seq: seq[-seq[-1]] + seq[-seq[-2]], True)
 	print(f"Hofstadter-Q : {[elem for elem in hofstadter_q(10)]}")
